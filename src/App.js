@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import cslx from 'cslx';
+import clsx from 'clsx';
 
 function App() {
   const styles = {
