@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import clsx from 'clsx';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 // ─── How It Works Page ────────────────────────────────────────────────────────
 
@@ -34,7 +33,7 @@ function StepCard({ step }) {
         <h3 style={styles.stepTitle}>{step.title}</h3>
       </div>
       <p style={styles.stepDescription}>{step.description}</p>
-      {/* Replace this div with your <img> or <Image> component */}
+      {/* Replace this div with your <img> */}
       <div style={styles.imagePlaceholder}>
         {step.imagePlaceholder}
       </div>
@@ -42,29 +41,22 @@ function StepCard({ step }) {
   );
 }
 
-function HowItWorks() {
+function HowItWorks({ onBack }) {
   return (
     <div style={styles.wrapper}>
       <header style={styles.header}>
         <nav style={styles.nav}>
-          <div style={{ flexShrink: 0 }}>
-            <span style={styles.logo}>PROJ_LOGO</span>
-          </div>
-          <Link to="/" style={styles.backLink}>← Back</Link>
+          <span style={styles.logo}><button onClick={onBack} style={styles.backButton}>← Back</button></span>
+          
         </nav>
       </header>
 
       <main style={{ ...styles.main, alignItems: 'flex-start' }}>
-        {/* Hero */}
         <div style={{ marginBottom: 56 }}>
           <span style={styles.badge}>&gt;_ pointrr.dev</span>
           <h1 style={styles.heading}>
             Set the Point.{' '}
             <span style={styles.accentText}>
-              {/*
-                Drop your custom underline CSS class or SVG here.
-                e.g.: className="underline-custom"
-              */}
               The Internet Connects.
             </span>
           </h1>
@@ -74,7 +66,6 @@ function HowItWorks() {
           </p>
         </div>
 
-        {/* Steps */}
         <div style={styles.stepsGrid}>
           {steps.map((step) => (
             <StepCard key={step.number} step={step} />
@@ -85,15 +76,21 @@ function HowItWorks() {
   );
 }
 
-// ─── Home Page ────────────────────────────────────────────────────────────────
+// ─── App ──────────────────────────────────────────────────────────────────────
 
-function Home() {
+function App() {
+  const [page, setPage] = useState('home');
+
+  if (page === 'how-it-works') {
+    return <HowItWorks onBack={() => setPage('home')} />;
+  }
+
   return (
     <div style={styles.wrapper}>
       <header style={styles.header}>
         <nav style={styles.nav}>
           <div style={{ flexShrink: 0 }}>
-            <span style={styles.logo}>PROJ_LOGO</span>
+			<span style={styles.badge}>&gt;_ pointrr.dev</span>
           </div>
         </nav>
       </header>
@@ -108,7 +105,7 @@ function Home() {
           </p>
           <div style={styles.ctaContainer}>
             <a
-              href="https://forms.gle/fZtBokDao1jsVsAY7"
+              href="https://docs.google.com/forms/your-google-doc-link-here"
               target="_blank"
               rel="noopener noreferrer"
               className={clsx('signup-button')}
@@ -116,23 +113,16 @@ function Home() {
             >
               Sign Up
             </a>
+            <button
+              onClick={() => setPage('how-it-works')}
+              style={styles.secondaryButton}
+            >
+              How it works
+            </button>
           </div>
         </div>
       </main>
     </div>
-  );
-}
-
-// ─── App ──────────────────────────────────────────────────────────────────────
-
-function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/how-it-works" element={<HowItWorks />} />
-      </Routes>
-    </BrowserRouter>
   );
 }
 
@@ -163,11 +153,14 @@ const styles = {
     color: '#1e1e2e',
     letterSpacing: '-0.5px',
   },
-  backLink: {
+  backButton: {
+    background: 'none',
+    border: 'none',
     fontSize: 14,
     color: '#7c3aed',
-    textDecoration: 'none',
     fontWeight: 500,
+    cursor: 'pointer',
+    padding: 0,
   },
   main: {
     maxWidth: 1100,
@@ -197,6 +190,7 @@ const styles = {
   ctaContainer: {
     display: 'flex',
     gap: 12,
+    alignItems: 'center',
   },
   button: {
     display: 'inline-block',
@@ -207,6 +201,16 @@ const styles = {
     textDecoration: 'none',
     fontWeight: 600,
     fontSize: 15,
+  },
+  secondaryButton: {
+    padding: '12px 28px',
+    backgroundColor: 'transparent',
+    color: '#7c3aed',
+    border: '1px solid #ddd6fe',
+    borderRadius: 8,
+    fontWeight: 600,
+    fontSize: 15,
+    cursor: 'pointer',
   },
   badge: {
     display: 'inline-block',
